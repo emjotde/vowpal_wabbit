@@ -118,13 +118,15 @@ class ezexample {
   }
   
   ~ezexample() { // calls finish_example *only* if we created our own example!
-    if (ec->in_use)
-      VW::finish_example(*vw_par_ref, ec);
-    for (example**ecc=example_copies.begin; ecc!=example_copies.end; ecc++)
-      if ((*ecc)->in_use)
-        VW::finish_example(*vw_par_ref, *ecc);
-    example_copies.erase();
-    free(example_copies.begin);
+    if(we_create_ec) {
+      if (ec->in_use)
+        VW::finish_example(*vw_par_ref, ec);
+      for (example**ecc=example_copies.begin; ecc!=example_copies.end; ecc++)
+        if ((*ecc)->in_use)
+          VW::finish_example(*vw_par_ref, *ecc);
+      example_copies.erase();
+      free(example_copies.begin);
+    }
   }
 
   bool ensure_ns_exists(char c) {  // returns TRUE iff we should ignore it :)
